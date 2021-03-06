@@ -13,6 +13,14 @@
 i=1
 for ip in "$@"
 do  
-    echo "IP-$i: $ip";
+    if (($i == 1))
+    then 
+        ## whole process for first ip
+        echo "Supernode: $ip"
+        echo "IP-$i: $ip";
+    else
+        ## whole process for every other ip
+        echo "IP-$i: $ip";    
+    fi
     i=$((i + 1));
 done
