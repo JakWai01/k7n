@@ -9,3 +9,10 @@
 #
 # Run Information: This script needs to be run once to setup your whole kubernetes cluster with k3s and n2n. You can run this script on any machine to install your cluster remotely.
 #
+
+i=1
+for ip in "$@"
+do  
+    echo "IP-$i: $ip";
+    i=$((i + 1));
+done
