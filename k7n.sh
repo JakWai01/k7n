@@ -15,14 +15,15 @@ for ip in "$@"
 do  
     if (($i == 1))
     then 
-        ## whole process for first ip
         echo "Supernode: $ip"
         echo "IP-$i: $ip";
-        ssh root@${ip} "mkdir hello"
-        echo "Hello World!"
+        ssh root@${ip} << EOF
+            mkdir hello
+            mkdir hello2
+EOF
     else
-        ## whole process for every other ip
-        echo "IP-$i: $ip";    
+        echo "IP-$i: $ip";
+        ssh root@${ip} "mkdir hello"
     fi
     i=$((i + 1));
 done
