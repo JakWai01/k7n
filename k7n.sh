@@ -18,6 +18,8 @@ do
         ## whole process for first ip
         echo "Supernode: $ip"
         echo "IP-$i: $ip";
+        ssh root@${ip} "mkdir hello"
+        echo "Hello World!"
     else
         ## whole process for every other ip
         echo "IP-$i: $ip";    
