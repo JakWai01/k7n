@@ -22,13 +22,17 @@ do
     if (($i == 1))
     then 
         echo "Supernode: $ip"
-        # Create supernode systemd service
+        # Create systemd service: supernode.service
         ssh root@${ip} "echo -e '[Unit]\nDescription=Starting n2n supernode\n\n[Service]\nExecStart=/usr/sbin/supernode -l 7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/supernode.service"
         ssh root@${ip} "systemctl daemon-reload"
         ssh root@${ip} "systemctl enable supernode.service"
         ssh root@${ip} "systemctl start supernode.service"
     fi
-    # Create systemd service to connect to supernode
+    # Create systemd service: vpn.service
+    ssh root@${ip} "echo -e '[Unit]\nDescription=Connecting to supernode\n\n[Service]\nExecStart=/usr/sbin/edge -A3 -c name -k name -a 192.168.100.${i} -f -l ${ip}:7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vpn.service"
+    ssh root@${ip} "systemctl daemon-reload"
+    ssh root@${ip} "systemctl enable vpn.service"
+    ssh root@${ip} "systemctl start vpn.service"
     echo "IP: $ip"
     echo "Back home"
     i=$((i + 1));
