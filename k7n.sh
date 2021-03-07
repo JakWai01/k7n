@@ -10,7 +10,6 @@
 # Run Information: This script needs to be run once to setup your whole kubernetes cluster with k3s and n2n. You can run this script on any machine to install your cluster remotely.
 #
 token = "token"
-supernode_ip;
 i=1
 for ip in "$@"
 do  
@@ -21,6 +20,8 @@ do
     ssh root@${ip} "apt install -y n2n"
     if (($i == 1))
     then 
+        supernode=$ip
+        echo $supernode
         echo "Supernode: $ip"
         # Create systemd service: supernode.service
         ssh root@${ip} "echo -e '[Unit]\nDescription=Starting n2n supernode\n\n[Service]\nExecStart=/usr/sbin/supernode -l 7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/supernode.service"
@@ -36,12 +37,13 @@ do
     ssh root@${ip} "systemctl start vpn.service"
     # token=$(ssh root@${ip} "echo 'Hallo Welt'")
     # echo $token
-    echo "Back home"
     if (($i == 1))
     then 
         ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server --node-ip=${ip} --flannel-iface=edge0' sh -"
         token=$(ssh root@${ip} cat /var/lib/rancher/k3s/server/node-token)
         echo $token
+    else 
+        ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='agent --token=${token} --node-ip=${ip} --server=https://$supernode:6443 --flannel-iface=edge0' sh -"
     fi 
     i=$((i + 1));
 done
