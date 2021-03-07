@@ -14,21 +14,22 @@ supernode_ip;
 i=1
 for ip in "$@"
 do  
+    # Install n2n 
+    ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
+    ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"  
+    ssh root@${ip} "apt update"
+    ssh root@${ip} "apt install -y n2n"
     if (($i == 1))
     then 
         echo "Supernode: $ip"
-        echo "IP-$i: $ip";
-        ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
-        ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"  
-        ssh root@${ip} "apt update"
-        ssh root@${ip} "apt install -y n2n"
-    else
-        echo "IP-$1: $ip";
-        ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
-        ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"  
-        ssh root@${ip} "apt update"
-        ssh root@${ip} "apt install -y n2n"
+        # Create supernode systemd service
+        ssh root@${ip} "echo -e '[Unit]\nDescription=Starting n2n supernode\n\n[Service]\nExecStart=/usr/sbin/supernode -l 7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/supernode.service"
+        ssh root@${ip} "systemctl daemon-reload"
+        ssh root@${ip} "systemctl enable supernode.service"
+        ssh root@${ip} "systemctl start supernode.service"
     fi
+    # Create systemd service to connect to supernode
+    echo "IP: $ip"
     echo "Back home"
     i=$((i + 1));
 done
