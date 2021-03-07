@@ -18,10 +18,16 @@ do
     then 
         echo "Supernode: $ip"
         echo "IP-$i: $ip";
-        supernode_ip = $ip
-        ssh root@${ip}
+        ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
+        ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"  
+        ssh root@${ip} "apt update"
+        ssh root@${ip} "apt install -y n2n"
     else
         echo "IP-$1: $ip";
+        ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
+        ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"  
+        ssh root@${ip} "apt update"
+        ssh root@${ip} "apt install -y n2n"
     fi
     echo "Back home"
     i=$((i + 1));
