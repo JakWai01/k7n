@@ -28,12 +28,20 @@ do
         ssh root@${ip} "systemctl enable supernode.service"
         ssh root@${ip} "systemctl start supernode.service"
     fi
+    echo "IP: $ip" 
     # Create systemd service: vpn.service
     ssh root@${ip} "echo -e '[Unit]\nDescription=Connecting to supernode\n\n[Service]\nExecStart=/usr/sbin/edge -A3 -c name -k name -a 192.168.100.${i} -f -l ${ip}:7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vpn.service"
     ssh root@${ip} "systemctl daemon-reload"
     ssh root@${ip} "systemctl enable vpn.service"
     ssh root@${ip} "systemctl start vpn.service"
-    echo "IP: $ip"
+    # token=$(ssh root@${ip} "echo 'Hallo Welt'")
+    # echo $token
     echo "Back home"
+    if (($i == 1))
+    then 
+        ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server --node-ip=${ip} --flannel-iface=edge0' sh -"
+        token=$(ssh root@${ip} cat /var/lib/rancher/k3s/server/node-token)
+        echo $token
+    fi 
     i=$((i + 1));
 done
