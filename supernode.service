@@ -1,0 +1,9 @@
+[Unit]
+Description=Starting n2n supernode
+
+[Service]
+ExecStart=/usr/sbin/supernode -l 7777
+Restart=on-failure
+
+[Install]
+WantedBy=multi-user.target
