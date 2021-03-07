@@ -9,6 +9,8 @@
 #
 # Run Information: This script needs to be run once to setup your whole kubernetes cluster with k3s and n2n. You can run this script on any machine to install your cluster remotely.
 #
+show_config=false
+
 for option in "$@"; do
     if [ $option == "-h" ] || [ $option == "--help" ]; then
         echo "Help"
@@ -20,7 +22,6 @@ for option in "$@"; do
     fi
 done
 
-show_config=false
 i=1
 for ip in "$@"; do
     if [ $ip != "-c" ]; then
@@ -60,5 +61,5 @@ done
 
 if [[ "$show_config" = true ]]; then
     echo "DRINNE"
-    echo $(ssh root@${supernode} "cat /etc/rancher/k3s/k3s.yaml")
+    echo "$(ssh root@${supernode} "cat /etc/rancher/k3s/k3s.yaml")"
 fi
