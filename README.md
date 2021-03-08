@@ -7,6 +7,12 @@ Creating a working Kubernetes cluster can be a big challenge for beginners. It i
 ## Features
 By just providing the IP's of your servers k7n will ssh into each of them and perform the full installation of the mentioned tools.
 
+### Supported Distributions
+| Distribution  | Status        | 
+| ------------- |:-------------:|
+| <img src="https://github.com/vorillaz/devicons/blob/master/!SVG/debian.svg" width="25">     | ✅ |
+
+
 ## Installation
 Clone the repository:  
 
