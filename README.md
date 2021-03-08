@@ -1,6 +1,8 @@
 # k7n
 A bash tool to setup [k3s](https://github.com/k3s-io/k3s) and [n2n](https://github.com/ntop/n2n) ([Kubernetes](https://kubernetes.io) behind a VPN) automatically. The name **k7n** results of the original two technologies concatenated (k3sn2n) and summed up in k8s manor.
 
+![Demo Video](./demo.gif)
+
 ## Motivation
 Creating a working [Kubernetes](https://kubernetes.io) cluster can be a big challenge for beginners. It is way harder though, to create a [Kubernetes](https://kubernetes.io) cluster behind a VPN, so also your nodes behind asymmetrical NAT can participate in your cluster (like my old laptop). This project aims to setup a [Kubernetes](https://kubernetes.io) cluster behind a VPN automatically for you using [k3s](https://github.com/k3s-io/k3s) and [n2n](https://github.com/ntop/n2n). Adding a VPN to your infrastructure also provides security like explained [here](https://www.intruder.io/blog/how-to-secure-the-kubernetes-api-behind-a-vpn).
 
