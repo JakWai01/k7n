@@ -55,50 +55,61 @@ for ip in "$@"; do
     # Don't install if the current IP is the option '-c'
     if [ $ip != "-c" ]; then
 
-        # Install n2n on all machines
-        ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
-        ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"
-        ssh root@${ip} "apt update"
-        ssh root@${ip} "apt install -y n2n"
+        case "$(ssh root@${ip} '. /etc/os-release; echo $ID')" in
 
-        # True for supernode only
-        if (($i == 1)); then
+        "debian")
+            # Install n2n on all machines
+            ssh root@${ip} "curl -L -o /tmp/apt-ntop-stable.deb https://packages.ntop.org/apt-stable/buster/all/apt-ntop-stable.deb"
+            ssh root@${ip} "apt install -y /tmp/apt-ntop-stable.deb"
+            ssh root@${ip} "apt update"
+            ssh root@${ip} "apt install -y n2n"
 
-            supernode=$ip
-            echo "Supernode: $ip"
+            # True for supernode only
+            if (($i == 1)); then
 
-            # Create systemd service: supernode.service
-            ssh root@${ip} "echo -e '[Unit]\nDescription=Starting n2n supernode\n\n[Service]\nExecStart=/usr/sbin/supernode -l 7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/supernode.service"
+                supernode=$ip
+                echo "Supernode: $ip"
+
+                # Create systemd service: supernode.service
+                ssh root@${ip} "echo -e '[Unit]\nDescription=Starting n2n supernode\n\n[Service]\nExecStart=/usr/sbin/supernode -l 7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/supernode.service"
+                ssh root@${ip} "systemctl daemon-reload"
+                ssh root@${ip} "systemctl enable supernode.service"
+                ssh root@${ip} "systemctl start supernode.service"
+
+            fi
+
+            echo "IP: $ip"
+
+            # Create systemd service: vpn.service
+            ssh root@${ip} "echo -e '[Unit]\nDescription=Connecting to supernode\n\n[Service]\nExecStart=/usr/sbin/edge -A3 -c name -k name -a 192.168.100.${i} -f -l ${ip}:7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vpn.service"
             ssh root@${ip} "systemctl daemon-reload"
-            ssh root@${ip} "systemctl enable supernode.service"
-            ssh root@${ip} "systemctl start supernode.service"
+            ssh root@${ip} "systemctl enable vpn.service"
+            ssh root@${ip} "systemctl start vpn.service"
 
-        fi
+            # True for supernode (Kubernetes manager) only
+            if (($i == 1)); then
 
-        echo "IP: $ip"
+                # Install k3s on supernode
+                ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server --node-ip=${ip} --flannel-iface=edge0' sh -"
 
-        # Create systemd service: vpn.service
-        ssh root@${ip} "echo -e '[Unit]\nDescription=Connecting to supernode\n\n[Service]\nExecStart=/usr/sbin/edge -A3 -c name -k name -a 192.168.100.${i} -f -l ${ip}:7777\nRestart=on-failure\n\n[Install]\nWantedBy=multi-user.target' > /etc/systemd/system/vpn.service"
-        ssh root@${ip} "systemctl daemon-reload"
-        ssh root@${ip} "systemctl enable vpn.service"
-        ssh root@${ip} "systemctl start vpn.service"
+                # Get cluster token
+                token=$(ssh root@${ip} cat /var/lib/rancher/k3s/server/node-token)
+                echo $token
 
-        # True for supernode (Kubernetes manager) only
-        if (($i == 1)); then
+            else
 
-            # Install k3s on supernode
-            ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='server --node-ip=${ip} --flannel-iface=edge0' sh -"
+                # Install k3s on non-supernode nodes with the token aquired from the supernode
+                ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='agent --token=${token} --node-ip=${ip} --server=https://$supernode:6443 --flannel-iface=edge0' sh -"
 
-            # Get cluster token
-            token=$(ssh root@${ip} cat /var/lib/rancher/k3s/server/node-token)
-            echo $token
+            fi
+            ;;
 
-        else
+        *)
+            echo "The distribution" "$(ssh root@${ip} '. /etc/os-release; echo $ID')" "is not supported so far. You can open an Issue or make a Pull Request yourself."
+            exit
+            ;;
 
-            # Install k3s on non-supernode nodes with the token aquired from the supernode
-            ssh root@${ip} "curl -sfL https://get.k3s.io | INSTALL_K3S_EXEC='agent --token=${token} --node-ip=${ip} --server=https://$supernode:6443 --flannel-iface=edge0' sh -"
-
-        fi
+        esac
 
         i=$((i + 1))
 
