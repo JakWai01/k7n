@@ -33,11 +33,11 @@ cd ~/Documents/repos/k7n
 For example, to setup a cluster on 2 servers use the script like this:
 
 ```shell
-bash ./k7n.sh $IP_ADDRESS_1 $IPADDRESS_2
+bash ./k7n.sh $IPADDRESS_1 $IPADDRESS_2
 ```  
 
 The first IP entered will be the supernode (This IP should be reachable from all hosts as it is the 'manager' of your VPN) as well as a normal node. All subsequent entered IP's will be additional nodes in your cluster.  
-In this case `$IP_ADDRESS_1` would be the supernode as well as a normal node and `$IPADDRESS_2` would just be another node.
+In this case `$IPADDRESS_1` would be the supernode as well as a normal node and `$IPADDRESS_2` would just be another node.
 You can add as many node IP's as you want to the command. The first IP (`$IPADDRESS_1`) will be the manager of your cluster.
 All subsequent IP's are additional workers.
 
