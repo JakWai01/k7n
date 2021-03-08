@@ -24,7 +24,7 @@ Global Flags:
     [-c]onfig       Show the kubeconfig at the end of the setup so it can be copied to configure e.g. k9s or similar tools.
 
 Usage: 
-    e.g. './k7n.sh <ip_1> <ip_2>'
+    e.g. 'bash ./k7n.sh <ip_1> <ip_2>'
     The first IP entered will be the supernode as well as a normal node. All subsequent entered IP's will be additional nodes in your Cluster.
     In this case <ip_1> would be the supernode as well as a normal node and <ip_2> would just be another node.
     You can add as many node IP's as you want to the command. The first IP (<ip_1>) will be the manager of your cluster.
