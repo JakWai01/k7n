@@ -9,16 +9,27 @@ By just providing the IP's of your servers k7n will ssh into each of them and pe
 
 ## Installation
 Clone the repository:  
-```git clone git@github.com:JakWai01/k7n.git```  
+
+```shell
+git clone git@github.com:JakWai01/k7n.git
+```  
+
 Change your current directory to the k7n repository e.g.:  
-```cd ~/Documents/repos/k7n```
+
+```shell
+cd ~/Documents/repos/k7n
+```
 
 ## Usage
-For example, to setup a cluster on 2 servers use the script like this:   
-```bash ./k7n.sh $IP_ADDRESS_1 $IPADDRESS_2```  
+For example, to setup a cluster on 2 servers use the script like this:
+
+```shell
+bash ./k7n.sh $IP_ADDRESS_1 $IPADDRESS_2
+```  
+
 The first IP entered will be the supernode as well as a normal node. All subsequent entered IP's will be additional nodes in your Cluster.  
-In this case $IP_ADDRESS_1 would be the supernode as well as a normal node and $IPADDRESS_2 would just be another node.
-You can add as many node IP's as you want to the command. The first IP ($IPADDRESS_1) will be the manager of your cluster.
+In this case `$IP_ADDRESS_1` would be the supernode as well as a normal node and `$IPADDRESS_2` would just be another node.
+You can add as many node IP's as you want to the command. The first IP (`$IPADDRESS_1`) will be the manager of your cluster.
 All subsequent IP's are additional workers.
 
 ## Contribute
