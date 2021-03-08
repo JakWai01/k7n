@@ -13,7 +13,22 @@ show_config=false
 
 for option in "$@"; do
     if [ $option == "-h" ] || [ $option == "--help" ]; then
-        echo "Help"
+        echo "
+k7n is a tool to setup k3s and n2n on your infrastructure.
+
+Global Flags:
+    [-h]elp         Display this page.
+    [-c]onfig       Show the kubeconfig at the end of the configuration so it can be copied to configure e.g. k9s or similar tools.
+
+Usage: 
+    e.g. './k7n.sh <ip_1> <ip_2>'
+    The first IP entered will be the supernode as well as a normal node. All subsequent entered IP's will be additional nodes in your Cluster.
+    In this case <ip_1> would be the supernode as well as a normal node and <ip_2> would just be another node.
+    You can add as many node IP's as you want to the command. The first IP (<ip_1>) will be the manager of your cluster.
+    All subsequent IP's are additional workers.
+
+For more information, visit https://github.com/JakWai01/k7n.
+"
         exit
     fi
     if [ $option == "-c" ]; then
