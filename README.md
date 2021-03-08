@@ -39,6 +39,8 @@ In this case `$IP_ADDRESS_1` would be the supernode as well as a normal node and
 You can add as many node IP's as you want to the command. The first IP (`$IPADDRESS_1`) will be the manager of your cluster.
 All subsequent IP's are additional workers.
 
+If everything worked `kubectl get nodes` on your master-node should display all of your nodes. Alternatively you can run the script with the `-c` option and configure e.g. k9s on your local machine with the provided config to check if everything worked. 
+
 ## Contribute
 Feel free to contribute. A [code of conduct](https://github.com/JakWai01/k7n/blob/main/CODE_OF_CONDUCT.md) can be found inside the repository.
 
