@@ -8,21 +8,21 @@ Creating a working Kubernetes cluster can be a big challenge for beginners. It i
 By just providing the IP's of your servers k7n will ssh into each of them and perform the full installation of the mentioned tools.
 
 ## Installation
-Clone the repository:
-```git clone git@github.com:JakWai01/k7n.git```
-Change your current directory to the k7n repository e.g.:
+Clone the repository:  
+```git clone git@github.com:JakWai01/k7n.git```  
+Change your current directory to the k7n repository e.g.:  
 ```cd ~/Documents/repos/k7n```
 
 ## Usage
-For example, to setup a cluster on 2 servers use the script like this: 
-```bash ./k7n.sh $IP_ADDRESS_1 $IPADDRESS_2```
-The first IP entered will be the supernode as well as a normal node. All subsequent entered IP's will be additional nodes in your Cluster.
+For example, to setup a cluster on 2 servers use the script like this:   
+```bash ./k7n.sh $IP_ADDRESS_1 $IPADDRESS_2```  
+The first IP entered will be the supernode as well as a normal node. All subsequent entered IP's will be additional nodes in your Cluster.  
 In this case $IP_ADDRESS_1 would be the supernode as well as a normal node and $IPADDRESS_2 would just be another node.
 You can add as many node IP's as you want to the command. The first IP ($IPADDRESS_1) will be the manager of your cluster.
 All subsequent IP's are additional workers.
 
 ## Contribute
-Feel free to contribute. A CODE_OF_CONDUCT.md can be found inside the repository
+Feel free to contribute. A [code of conduct](https://github.com/JakWai01/k7n/blob/main/CODE_OF_CONDUCT.md) can be found inside the repository.
 
 ## License
 
