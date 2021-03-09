@@ -20,7 +20,7 @@ Icon | Distribution  | Status        |
 *Clone* the repository:  
 
 ```shell
-git clone git@github.com:JakWai01/k7n.git
+git clone https://github.com/JakWai01/k7n.git
 ```  
 
 Change your current directory to the k7n repository e.g.:  
